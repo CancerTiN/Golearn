@@ -1,0 +1,5 @@
+1) map在使用之前一定要make
+2) map的key不能重复，重新赋值已经存在的key会覆盖先前的value
+3) map的value可以相同
+4) map的key-value对是无序的
+5) make内置函数数目
