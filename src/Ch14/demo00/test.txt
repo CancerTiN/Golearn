@@ -1,0 +1,3 @@
+Hello, world!
+Beijing! abc! golang!
+Go, hello, world!
