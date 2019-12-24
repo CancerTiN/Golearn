@@ -8,16 +8,17 @@ import (
 )
 
 func main() {
-	file, err := os.Open("D:/Workspace/Golearn/src/Ch14/demo00/python.txt")
+	name := "D:/Workspace/Golearn/src/Ch14/demo00/abc.txt"
+	file, err := os.OpenFile(name, os.O_RDWR|os.O_APPEND, 0666)
 	if err != nil {
 		fmt.Println("Open file error:")
 		fmt.Println(err)
+		return
 	}
 	defer file.Close()
-	fmt.Println("file =", file)
+
 	reader := bufio.NewReader(file)
-	fmt.Println("reader =", reader)
-	fmt.Printf("The type of reader is %T.\n", reader)
+	i := 0
 	for {
 		str, err := reader.ReadString('\n')
 		if err == io.EOF {
@@ -26,7 +27,14 @@ func main() {
 			fmt.Println("Read string error:")
 			fmt.Println(err)
 		}
-		fmt.Printf("str = %v", str)
+		fmt.Printf("line %v = %v", i, str)
+		i++
 	}
-	fmt.Println("File reading finished ...")
+
+	str := "Hello! Beijing!\n"
+	writer := bufio.NewWriter(file)
+	for i := 0; i < 5; i++ {
+		writer.WriteString(str)
+	}
+	writer.Flush()
 }
