@@ -35,7 +35,7 @@ func main() {
 
 	// type 4
 	var person *Person = &Person{"mary", 60}
-	// var person *Person = &Person{}
+	// var model *Person = &Person{}
 	fmt.Println(person) // pointer
 	(*person).Name = "scott"
 	(*person).Age = 88
