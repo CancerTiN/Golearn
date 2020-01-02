@@ -45,8 +45,6 @@ func main() {
 		err := login(userId, userPwd)
 		if err != nil {
 			fmt.Println("Login failed")
-		} else {
-			fmt.Println("Login successful")
 		}
 	} else if key == 2 {
 		fmt.Println("Logic for user registration ...")

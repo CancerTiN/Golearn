@@ -44,11 +44,31 @@ func login(userId int, userPwd string) (err error) {
 		fmt.Println("conn.Write error:", err)
 		return err
 	}
+
+	_, err = conn.Write(dataMes)
+	if err != nil {
+		fmt.Println("conn.Write error:", err)
+		return err
+	}
+
 	fmt.Printf("The length of the message sent by the client is %d bytes\n", pkgLen)
 	fmt.Printf("The content of the message sent by the client is '%v'\n", dataMes)
 
-	fmt.Printf("userId = %d\n", userId)
-	fmt.Printf("userId = %s\n", userPwd)
+	//fmt.Printf("userId = %d\n", userId)
+	//fmt.Printf("userPwd = %s\n", userPwd)
+
+	resMes, err := readPkg(conn)
+	if err != nil {
+		fmt.Println("readPkg error:", err)
+		return
+	}
+	var loginResMes message.LoginResMes
+	err = json.Unmarshal([]byte(resMes.Data), &loginResMes)
+	if loginResMes.Code == 200 {
+		fmt.Println("login successful")
+	} else if loginResMes.Code == 500 {
+		fmt.Println(loginResMes.Error)
+	}
 
 	return nil
 }
