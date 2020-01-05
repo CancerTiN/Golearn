@@ -16,10 +16,13 @@ type Processor struct {
 func (p *Processor) serverProcessMes(mes *message.Message) (err error) {
 	switch mes.Type {
 	case message.LoginMesType:
+		fmt.Println("到了processor这里，信息为：", mes)
 		up := &process.UserProcess{Conn: p.Conn}
 		err = up.ServerProcessLogin(mes)
 	case message.RegisterMesType:
-		fmt.Println()
+		fmt.Println("到了processor这里，信息为：", mes)
+		up := &process.UserProcess{Conn: p.Conn}
+		err = up.ServerProcessRegister(mes)
 	default:
 		fmt.Println("Message type does not exist and cannot be processed ...")
 	}

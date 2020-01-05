@@ -1,9 +1,10 @@
 package message
 
 const (
-	LoginMesType    = "LoginMes"
-	LoginResMesType = "LoginResMes"
-	RegisterMesType = "RegisterMes"
+	LoginMesType       = "LoginMes"
+	LoginResMesType    = "LoginResMes"
+	RegisterMesType    = "RegisterMes"
+	RegisterResMesType = "RegisterResMes"
 )
 
 type Message struct {
@@ -18,9 +19,15 @@ type LoginMes struct {
 }
 
 type LoginResMes struct {
-	Code  int    `json:"code"`  // Return status code, 500 means the user is not registered, 200 means login is successful.
-	Error string `json:"error"` // Returns an error message.
+	Code  int    `json:"code"` // 500表示用户不存在 200表示登录成功
+	Error string `json:"error"`
 }
 
 type RegisterMes struct {
+	User User `json:"user"`
+}
+
+type RegisterResMes struct {
+	Code  int    `json:"code"` // 400表示编号已经被占用 200表示注册成功
+	Error string `json:"error"`
 }

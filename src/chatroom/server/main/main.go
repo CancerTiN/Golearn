@@ -1,11 +1,19 @@
 package main
 
 import (
+	"chatroom/server/model"
 	"fmt"
 	"net"
+	"time"
 )
 
+func initUserDao() {
+	model.MyUserDao = model.NewUserDao(pool)
+}
+
 func main() {
+	initPool("localhost:6379", 16, 0, 300*time.Second)
+	initUserDao()
 	fmt.Println("The server (new structure) is listening on port 8889 ...")
 	listen, err := net.Listen("tcp", "0.0.0.0:8889")
 	if err != nil {
