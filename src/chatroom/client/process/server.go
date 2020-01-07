@@ -19,11 +19,16 @@ func ShowMenu(userId int) {
 	var key int
 	fmt.Scanf("%d\n", &key)
 
+	var content string
+	smsProcess := &SmsProcess{}
+
 	switch key {
 	case 1:
 		outputOnlineUser()
 	case 2:
-		fmt.Println("发送信息")
+		fmt.Println("你想对大家说点什么:)")
+		fmt.Scanf("%s\n", &content)
+		smsProcess.SendGroupMes(content)
 	case 3:
 		fmt.Println("信息列表")
 	case 4:

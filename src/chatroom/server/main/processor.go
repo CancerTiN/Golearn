@@ -14,6 +14,7 @@ type Processor struct {
 }
 
 func (p *Processor) serverProcessMes(mes *message.Message) (err error) {
+	fmt.Println("到了serverProcessMes这里，信息为：", mes)
 	switch mes.Type {
 	case message.LoginMesType:
 		fmt.Println("到了processor这里，信息为：", mes)
