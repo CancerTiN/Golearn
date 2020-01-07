@@ -2,13 +2,15 @@ package process
 
 import (
 	"chatroom/client/utils"
+	"chatroom/common/message"
+	"encoding/json"
 	"fmt"
 	"net"
 	"os"
 )
 
-func ShowMenu() {
-	fmt.Println("--------恭喜TiN登录成功--------")
+func ShowMenu(userId int) {
+	fmt.Printf("--------恭喜%v登录成功--------\n", userId)
 	fmt.Println("\t1. 在线用户")
 	fmt.Println("\t2. 发送信息")
 	fmt.Println("\t3. 信息列表")
@@ -19,7 +21,7 @@ func ShowMenu() {
 
 	switch key {
 	case 1:
-		fmt.Println("在线用户")
+		outputOnlineUser()
 	case 2:
 		fmt.Println("发送信息")
 	case 3:
@@ -42,5 +44,13 @@ func serverProcessMes(conn net.Conn) {
 			return
 		}
 		fmt.Printf("客户端读取到服务器发送的信息为：%v\n", mes)
+		switch mes.Type {
+		case message.NotifyUserStatusMesType:
+			var notifyUserStatusMes message.NotifyUserStatusMes
+			json.Unmarshal([]byte(mes.Data), &notifyUserStatusMes)
+			updateUserStatus(notifyUserStatusMes)
+		default:
+			fmt.Println("服务器返回了未知的消息类型")
+		}
 	}
 }

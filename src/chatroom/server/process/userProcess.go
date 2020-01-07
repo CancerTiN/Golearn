@@ -11,9 +11,50 @@ import (
 
 type UserProcess struct {
 	Conn net.Conn
+	// onlineUsers map[int]*UserProcess
+	UserId int
 }
 
-func (u *UserProcess) ServerProcessRegister(mes *message.Message) (err error) {
+func (up *UserProcess) NotifyOthersOnlineUser(userId int) {
+	for id, oup := range userMgr.onlineUsers {
+		if id == userId {
+			continue
+		}
+		oup.NotifyMeOnline(userId)
+	}
+}
+
+func (up *UserProcess) NotifyMeOnline(userId int) {
+	var notifyUserStatusMes message.NotifyUserStatusMes
+	notifyUserStatusMes.UserId = userId
+	notifyUserStatusMes.Status = message.UserOnline
+
+	notifyUserStatusMesData, err := json.Marshal(notifyUserStatusMes)
+	if err != nil {
+		fmt.Println("json.Marshal(notifyUserStatusMes)错误：", err)
+		return
+	}
+
+	var mes message.Message
+	mes.Type = message.NotifyUserStatusMesType
+	mes.Data = string(notifyUserStatusMesData)
+
+	mesData, err := json.Marshal(mes)
+	if err != nil {
+		fmt.Println("json.Marshal(mesData)错误：", err)
+		return
+	}
+
+	tf := &utils.Transfer{Conn: up.Conn}
+	err = tf.WritePkg(mesData)
+	if err != nil {
+		fmt.Println("tf.WritePkg(mesData)错误：", err)
+		return
+	}
+
+}
+
+func (up *UserProcess) ServerProcessRegister(mes *message.Message) (err error) {
 	fmt.Println("到了ServerProcessRegister这里，mes为：", mes)
 	var registerMes message.RegisterMes
 	err = json.Unmarshal([]byte(mes.Data), &registerMes)
@@ -53,7 +94,7 @@ func (u *UserProcess) ServerProcessRegister(mes *message.Message) (err error) {
 	}
 
 	tf := &utils.Transfer{
-		Conn: u.Conn,
+		Conn: up.Conn,
 	}
 
 	err = tf.WritePkg(resMesData)
@@ -61,7 +102,7 @@ func (u *UserProcess) ServerProcessRegister(mes *message.Message) (err error) {
 	return
 }
 
-func (u *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
+func (up *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 	var loginMes message.LoginMes
 	err = json.Unmarshal([]byte(mes.Data), &loginMes)
 	if err != nil {
@@ -87,8 +128,19 @@ func (u *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 		}
 	} else {
 		loginResMes.Code = 200
+
+		up.UserId = loginMes.UserId
+		userMgr.AddOnlineUser(up)
+
+		up.NotifyOthersOnlineUser(loginMes.UserId)
+
+		for id, _ := range userMgr.onlineUsers {
+			loginResMes.UserIds = append(loginResMes.UserIds, id)
+		}
+
 		fmt.Println("登陆成功：", user)
 	}
+
 	//if loginMes.UserId == 100 && loginMes.UserPwd == "123456" {
 	//	loginResMes.Code = 200
 	//} else {
@@ -113,7 +165,7 @@ func (u *UserProcess) ServerProcessLogin(mes *message.Message) (err error) {
 	}
 
 	tf := &utils.Transfer{
-		Conn: u.Conn,
+		Conn: up.Conn,
 	}
 
 	err = tf.WritePkg(resMesData)

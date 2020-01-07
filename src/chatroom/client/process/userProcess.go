@@ -118,10 +118,22 @@ func (u *UserProcess) Login(userId int, userPwd string) (err error) {
 	var loginResMes message.LoginResMes
 	err = json.Unmarshal([]byte(resMes.Data), &loginResMes)
 	if loginResMes.Code == 200 {
-		fmt.Println("login successful")
+		fmt.Println("登录成功")
+		fmt.Println("到了登录成功后，登录返回信息为：", loginResMes)
+		fmt.Println("当前在线用户列表如下：")
+		for _, onlineUserId := range loginResMes.UserIds {
+			if onlineUserId == userId {
+				continue
+			}
+			fmt.Println("用户编号：\t", onlineUserId)
+			user := &message.User{UserId: onlineUserId, UserStatus: message.UserOnline}
+			onlineUserMap[onlineUserId] = user
+		}
+		fmt.Println()
+
 		go serverProcessMes(conn)
 		for {
-			ShowMenu()
+			ShowMenu(userId)
 		}
 	} else {
 		fmt.Println(loginResMes.Error)
