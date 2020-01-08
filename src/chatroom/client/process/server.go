@@ -54,6 +54,8 @@ func serverProcessMes(conn net.Conn) {
 			var notifyUserStatusMes message.NotifyUserStatusMes
 			json.Unmarshal([]byte(mes.Data), &notifyUserStatusMes)
 			updateUserStatus(notifyUserStatusMes)
+		case message.SmsMesType:
+			outputGroupMes(&mes)
 		default:
 			fmt.Println("服务器返回了未知的消息类型")
 		}
