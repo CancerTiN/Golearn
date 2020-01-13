@@ -9,54 +9,69 @@ import (
 	"strings"
 )
 
-type Queue struct {
+type CircleQueue struct {
 	maxSize int
 	array   []int
-	front   int
-	rear    int
+	head    int
+	tail    int
+	size    int
 }
 
-func initQueue(maxSize int) *Queue {
-	return &Queue{
+func initCircleQueue(maxSize int) *CircleQueue {
+	return &CircleQueue{
 		maxSize: maxSize,
 		array:   make([]int, maxSize),
-		front:   -1,
-		rear:    -1,
 	}
 }
 
-func (q *Queue) Add(val int) (err error) {
-	if q.rear == q.maxSize-1 {
-		return errors.New("the rear of the queue has reached the border")
+func (c *CircleQueue) IsFull() bool {
+	return c.size == c.maxSize
+}
+
+func (c *CircleQueue) IsEmpty() bool {
+	return c.size == 0
+}
+
+func (c *CircleQueue) Push(val int) (err error) {
+	if c.IsFull() {
+		return errors.New("the tail of the queue has reached the border")
 	}
-	q.rear++
-	q.array[q.rear] = val
+	c.array[c.tail] = val
+	c.tail = (c.tail + 1) % c.maxSize
+	c.size++
 	return
 }
 
-func (q *Queue) Get() (val int, err error) {
-	if q.front == q.rear {
+func (c *CircleQueue) Pop() (val int, err error) {
+	if c.IsEmpty() {
 		err = errors.New("the queue is currently empty")
 		return
 	}
-	q.front++
-	val = q.array[q.front]
+	val = c.array[c.head]
+	c.head = (c.head + 1) % c.maxSize
+	c.size--
 	return
 }
 
-func (q *Queue) Show() {
-	if q.front == q.rear {
+func (c *CircleQueue) List() {
+	if c.size == 0 {
 		fmt.Println("The queue is currently empty.")
 		return
 	}
 	fmt.Println("The current situation of the queue is:")
-	for i := q.front + 1; i <= q.rear; i++ {
-		fmt.Printf("queue[%d] = %d\n", i, q.array[i])
+	i := c.head
+	for j := 0; j < c.size; j++ {
+		fmt.Printf("queue[%d] = %d\n", i, c.array[i])
+		i = (i + 1) % c.maxSize
 	}
 }
 
 func main() {
-	q := initQueue(2)
+	if false {
+		moduloDemo()
+	}
+
+	cq := initCircleQueue(3)
 
 	var key string
 	var val int
@@ -67,7 +82,7 @@ func main() {
 		fmt.Println("2. Enter <get> to get data from the queue")
 		fmt.Println("3. Enter <show> to display the queue")
 		fmt.Println("4. Enter <exit> to exit the operation")
-		fmt.Print("Please select (1-4): ")
+		fmt.Print("Please select {add, get, show, exit}: ")
 		key = strings.TrimSpace(input())
 		switch key {
 		case "add":
@@ -77,7 +92,7 @@ func main() {
 				fmt.Println(err.Error())
 			} else {
 				val = int(i)
-				err = q.Add(val)
+				err = cq.Push(val)
 				if err != nil {
 					fmt.Printf("Fail to add data to the queue: %v.\n", err.Error())
 				} else {
@@ -85,14 +100,14 @@ func main() {
 				}
 			}
 		case "get":
-			val, err := q.Get()
+			val, err := cq.Pop()
 			if err != nil {
 				fmt.Printf("Fail to get data from the queue: %v.\n", err.Error())
 			} else {
 				fmt.Printf("The value taken from the queue is %d.\n", val)
 			}
 		case "show":
-			q.Show()
+			cq.List()
 		case "exit":
 			os.Exit(0)
 		default:
@@ -112,4 +127,11 @@ func input() (lineStr string) {
 	}
 	lineStr = string(line)
 	return
+}
+
+func moduloDemo() {
+	m := 10
+	for i := 1; i < m; i++ {
+		fmt.Println(i % m)
+	}
 }
