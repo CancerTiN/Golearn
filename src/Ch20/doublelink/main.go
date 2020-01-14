@@ -1,11 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type HeroNode struct {
 	no       int
 	name     string
 	nickname string
+	pre      *HeroNode
 	next     *HeroNode
 }
 
@@ -18,25 +21,7 @@ func InsertHeroNode(head, newHeroNode *HeroNode) {
 		temp = temp.next
 	}
 	temp.next = newHeroNode
-}
-
-func ListHeroNode(head *HeroNode) {
-	temp := head
-	if temp.next == nil {
-		fmt.Println("The single link is currently empty.")
-		return
-	}
-	for {
-		if temp.next == nil {
-			break
-		}
-		fmt.Printf("{%d, %s, %s}", temp.next.no, temp.next.name, temp.next.nickname)
-		temp = temp.next
-		if temp.next != nil {
-			fmt.Print(" ==> ")
-		}
-	}
-	fmt.Println()
+	newHeroNode.pre = temp
 }
 
 func InsertSortedHeroNode(head, newHeroNode *HeroNode) {
@@ -48,7 +33,7 @@ func InsertSortedHeroNode(head, newHeroNode *HeroNode) {
 		} else if temp.next.no > newHeroNode.no {
 			break
 		} else if temp.next.no == newHeroNode.no {
-			flag = false
+			flag = true
 			break
 		}
 		temp = temp.next
@@ -58,7 +43,11 @@ func InsertSortedHeroNode(head, newHeroNode *HeroNode) {
 		return
 	} else {
 		newHeroNode.next = temp.next
+		if newHeroNode.next != nil {
+			newHeroNode.next.pre = newHeroNode
+		}
 		temp.next = newHeroNode
+		newHeroNode.pre = temp
 	}
 }
 
@@ -76,8 +65,55 @@ func DeleteHeroNode(head *HeroNode, id int) {
 	}
 	if flag {
 		temp.next = temp.next.next
+		if temp.next != nil {
+			temp.next.pre = temp
+		}
 	} else {
 		fmt.Printf("Fail to delete because {no: %d} does not exists.\n", id)
+	}
+}
+
+func ListHeroNode(head *HeroNode) {
+	temp := head
+	if temp.next == nil {
+		fmt.Println("The double link is currently empty.")
+		return
+	}
+	for {
+		if temp.next == nil {
+			break
+		}
+		fmt.Printf("{%d, %s, %s}", temp.next.no, temp.next.name, temp.next.nickname)
+		temp = temp.next
+		if temp.next != nil {
+			fmt.Print(" <=> ")
+		} else {
+			fmt.Println()
+		}
+	}
+}
+
+func ReverseListHeroNode(head *HeroNode) {
+	temp := head
+	if temp.next == nil {
+		fmt.Println("The linked list is currently empty.")
+		return
+	}
+	for {
+		if temp.next == nil {
+			break
+		}
+		temp = temp.next
+	}
+	for {
+		fmt.Printf("{%d, %s, %s}", temp.no, temp.name, temp.nickname)
+		temp = temp.pre
+		if temp.pre == nil {
+			fmt.Println()
+			break
+		} else {
+			fmt.Print(" <=> ")
+		}
 	}
 }
 
@@ -88,28 +124,24 @@ func main() {
 		no:       1,
 		name:     "Song Jiang",
 		nickname: "Rain in time",
-		next:     nil,
 	}
 
 	hero2 := &HeroNode{
 		no:       2,
 		name:     "Lu Junyi",
 		nickname: "Jade Unicorn",
-		next:     nil,
 	}
 
 	hero3 := &HeroNode{
 		no:       3,
 		name:     "Lin Chong",
 		nickname: "Leopard head",
-		next:     nil,
 	}
 
 	hero4 := &HeroNode{
 		no:       4,
 		name:     "Wu Yong",
 		nickname: "Chitastar",
-		next:     nil,
 	}
 
 	key := 1
@@ -118,6 +150,7 @@ func main() {
 		InsertHeroNode(head, hero1)
 		InsertHeroNode(head, hero2)
 		InsertHeroNode(head, hero3)
+		InsertHeroNode(head, hero4)
 	case 1:
 		InsertSortedHeroNode(head, hero3)
 		InsertSortedHeroNode(head, hero1)
@@ -126,6 +159,6 @@ func main() {
 	}
 
 	ListHeroNode(head)
-	DeleteHeroNode(head, 2)
-	ListHeroNode(head)
+	DeleteHeroNode(head, 4)
+	ReverseListHeroNode(head)
 }
