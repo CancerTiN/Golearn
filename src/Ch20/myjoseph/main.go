@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-var nMax = 100
+var nMax = 1000
 
 type Node struct {
 	Id   int
@@ -74,49 +74,49 @@ func DeleteCircleLink(head *Node, id int) (err error) {
 	return
 }
 
-func GetHeadNextId(head *Node) (id int, err error) {
-	if head.Next == nil {
-		err = errors.New("head node points to <nil>")
-		return
-	}
-	id = head.Next.Id
-	return
+func main() {
+	fmt.Println("Joseph problem will be solved here!")
+	Play(5, 2, 3)
+	//Play(4, 3, 2)
 }
 
-func main() {
+func Play(n, k, m int) {
+	var slice []int
+
 	head := &Node{}
 
-	nod1 := &Node{Id: 25}
-	nod2 := &Node{Id: 37}
-	nod3 := &Node{Id: 49}
-	nod4 := &Node{Id: 61}
-
-	InsertCircleLink(head, nod1)
-
-	ListCircleLink(head)
-
-	InsertCircleLink(head, nod2)
-	InsertCircleLink(head, nod3)
-	InsertCircleLink(head, nod4)
-
-	ListCircleLink(head)
-
-	headNextId, err := GetHeadNextId(head)
-	if err != nil {
-		fmt.Println("GetHeadNextId error:", err)
-	} else {
-		fmt.Printf("Head node points to node of which id is %d.\n", headNextId)
+	for id := 1; id <= n; id++ {
+		InsertCircleLink(head, &Node{Id: id})
 	}
 
-	for _, DeleteId := range []int{37, 61, 40, 25, 49} {
-		err = DeleteCircleLink(head, DeleteId)
+	ListCircleLink(head)
+
+	temp := head.Next
+	for {
+		if temp.Id == k {
+			break
+		}
+		temp = temp.Next
+	}
+
+	for head.Next != nil {
+		for step := 0; step < m-1; step++ {
+			temp = temp.Next
+		}
+		outId := temp.Id
+		slice = append(slice, outId)
+		temp = temp.Next
+		err := DeleteCircleLink(head, outId)
 		if err != nil {
 			fmt.Println("DeleteCircleLink error:", err)
 		} else {
-			fmt.Printf("Succeed in deleting node of which id is %d.\n", DeleteId)
+			fmt.Printf("Succeed in deleting node of which id is %d.\n", outId)
+		}
+		if temp == nil {
+			temp = head.Next
 		}
 		ListCircleLink(head)
 	}
 
-	ListCircleLink(head)
+	fmt.Println("slice:", slice)
 }
