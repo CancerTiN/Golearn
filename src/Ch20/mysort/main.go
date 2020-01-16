@@ -8,12 +8,13 @@ import (
 
 // 45533
 // 30969
-const n = 30969
+// 23686
+const n = 23686
 
 func try() {
 	slice := []int{10, 34, 19, 100, 80}
 	fmt.Println(slice)
-	Insert(slice)
+	Quick(slice, 0, len(slice)-1)
 	fmt.Println(slice)
 }
 
@@ -30,6 +31,7 @@ func main() {
 		testBubble(array)
 		testSelect(array)
 		testInsert(array)
+		testQuick(array)
 	}
 }
 
@@ -61,4 +63,14 @@ func testInsert(array [n]int) {
 	endTime := float64(time.Now().UnixNano()) / 1e9
 	fmt.Println(slice)
 	fmt.Printf("InsertSort takes %f seconds.\n", endTime-startTime)
+}
+
+func testQuick(array [n]int) {
+	slice := array[:]
+	fmt.Println(slice)
+	startTime := float64(time.Now().UnixNano()) / 1e9
+	Quick(slice, 0, len(slice)-1)
+	endTime := float64(time.Now().UnixNano()) / 1e9
+	fmt.Println(slice)
+	fmt.Printf("QuickSort takes %f seconds.\n", endTime-startTime)
 }

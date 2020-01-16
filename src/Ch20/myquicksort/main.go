@@ -9,11 +9,13 @@ func main() {
 	//slice = []int{-1, -1, -1, -1}
 	//slice = []int{3, 3, 3}
 	//slice = []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+	//slice = []int{0, 2, 7, 7, 0, 9, 7, 0, 1, 3}
 	fmt.Println(slice)
 	myQuickSort(slice, 0, len(slice)-1)
 	fmt.Println(slice)
 
 	slice = []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+	slice = []int{0, 2, 7, 7, 0, 9, 7, 0, 1, 3}
 	fmt.Println(slice)
 	quickSort(slice, 0, len(slice)-1)
 	fmt.Println(slice)
@@ -53,6 +55,7 @@ func quickSort(slice []int, left int, right int) {
 		r--
 	}
 	fmt.Printf("D {n: %d, l: %d, r: %d}\n", n, l, r)
+	fmt.Println(slice)
 	if left < r {
 		quickSort(slice, left, r)
 	}
