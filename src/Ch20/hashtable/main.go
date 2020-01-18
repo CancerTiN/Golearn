@@ -26,13 +26,7 @@ func (e *EmpLink) Insert(emp *Emp) {
 	temp := e.Head
 	for temp.Next != nil {
 		temp = temp.Next
-		if e.Head == temp.Last && emp.Id < temp.Id {
-			emp.Last = temp.Last
-			emp.Last.Next = emp
-			temp.Last = emp
-			emp.Next = temp
-			return
-		} else if temp.Last.Id < emp.Id && emp.Id < temp.Id {
+		if (e.Head == temp.Last || temp.Last.Id < emp.Id) && emp.Id < temp.Id {
 			emp.Last = temp.Last
 			emp.Last.Next = emp
 			temp.Last = emp
