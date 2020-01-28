@@ -2,15 +2,6 @@ package main
 
 import "fmt"
 
-func main() {
-	switch 2 {
-	case 1:
-		test01()
-	case 2:
-		test02()
-	}
-}
-
 func test01() {
 	中文变量 := "变量内容"
 	fmt.Println("中文变量：", 中文变量)
@@ -29,4 +20,22 @@ func test02() {
 	// var x3 string = nil
 	var x4 error = nil
 	fmt.Println(x2, x4)
+}
+
+func test03() {
+	var m map[string]int
+	var f func(int) int
+	var ch <-chan int
+	fmt.Println(m, f, ch)
+}
+
+func main() {
+	switch 3 {
+	case 1:
+		test01()
+	case 2:
+		test02()
+	case 3:
+		test03()
+	}
 }

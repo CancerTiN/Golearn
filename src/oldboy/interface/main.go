@@ -48,9 +48,11 @@ func main() {
 		test01()
 	case 2:
 		test02()
+	default:
+		document01()
+		document02()
+		document03()
 	}
-	document01()
-	document02()
 }
 
 func document01() {
@@ -68,4 +70,9 @@ func document02() {
 		2)如果接口A的方法列表是接口B的方法列表的子集，那么接口B的具体实现可以赋值给A
 		3)接口可以继承
 	*/
+}
+
+func document03() {
+	// interface不一定是一个值类型
+	// interface{}可以指向任意对象的类型
 }

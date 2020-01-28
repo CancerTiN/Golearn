@@ -35,13 +35,22 @@ func test03() {
 	fmt.Println(s1, s2)
 }
 
+func test04() {
+	x := []string{"a", "b", "c"}
+	for v := range x {
+		fmt.Print(v)
+	}
+}
+
 func main() {
-	switch 3 {
+	switch 5 {
 	case 1:
 		test01()
 	case 2:
 		test02()
 	case 3:
 		test03()
+	case 4:
+		test04()
 	}
 }
