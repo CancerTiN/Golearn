@@ -2,11 +2,17 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/davecgh/go-spew" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/eapache/go-resiliency" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/eapache/go-xerial-snappy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/eapache/queue" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/go-redis/redis" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/go-sql-driver/mysql" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/golang/snappy" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/gomodule/redigo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/hpcloud/tail" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/jmoiron/sqlx" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/nsqio/go-nsq" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/Shopify/sarama.v1" vcs="Git" />
   </component>
 </project>
